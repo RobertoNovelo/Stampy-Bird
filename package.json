@@ -1,0 +1,31 @@
+{
+  "name": "stampy-bird",
+  "version": "1.0.0",
+  "description": "FlappyGame",
+  "main": "src/js/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "mkdir": "mkdir -p build",
+    "build": "npm run clean && npm run mkdir && npm run build:js && npm run build:css",
+    "watch": "npm run watch:js & npm run watch:css",
+    "clean": "rm -rf build",
+    "build:js": "npm run clean:js && webpack",
+    "watch:js": "npm run build:js && webpack --watch",
+    "clean:js": "rm -f build/$npm_package_name.js build/$npm_package_name.js.map",
+    "build:css": "npm run clean:css && lessc --source-map src/css/index.less build/$npm_package_name.css",
+    "watch:css": "npm run build:css && chokidar 'src/css/**/*.less' -c 'npm run build:css'",
+    "clean:css": "rm -f build/$npm_package_name.css build/$npm_package_name.css.map"
+  },
+  "author": "Roberto Novelo",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "babel-core": "^6.8.0",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.6.0",
+    "chokidar-cli": "^1.2.0",
+    "less": "^2.7.1",
+    "less-plugin-clean-css": "^1.5.1",
+    "uglify-js": "^2.6.2",
+    "webpack": "^1.13.0"
+  }
+}
