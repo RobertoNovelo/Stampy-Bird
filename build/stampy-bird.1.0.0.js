@@ -62,7 +62,7 @@
 	var pipe = __webpack_require__(19);
 	
 	var FlappyBird = function () {
-	    this.entities = [new bird.Bird(), new pipe.Pipe(0, 1), new pipe.Pipe(.7, 1)];
+	    this.entities = [new bird.Bird()];
 	    this.graphics = new graphicsSystem.GraphicsSystem(this.entities);
 	    this.physics = new physicsSystem.PhysicsSystem(this.entities);
 	    this.input = new inputSystem.InputSystem(this.entities);
@@ -432,14 +432,33 @@
 	var collisionComponent = __webpack_require__(12);
 	// var settings = require("../settings");
 	
-	var Pipe = function (x, y) {
-	
+	var Pipe = function (topPipe, offset) {
 	    var physics = new physicsComponent.PhysicsComponent(this);
-	    physics.position.y = x;
-	    physics.position.x = y;
+	    var graphics = new graphicsComponent.PipeGraphicsComponent(this);
+	    physics.position.topPipe = topPipe;
+	    if (topPipe) {
+	        physics.position.y = 0.7;
+	    } else {
+	        physics.position.y = 0;
+	    }
+	    physics.position.x = 4000 / graphics.canvas.width;
 	    physics.velocity.x = -0.4;
 	
-	    var graphics = new graphicsComponent.PipeGraphicsComponent(this);
+	    switch (offset) {
+	        case 0:
+	            physics.position.offset = 0.1;
+	            break;
+	        case 1:
+	            physics.position.offset = 0.2;
+	            break;
+	        case 2:
+	            physics.position.offset = 0.3;
+	            break;
+	        default:
+	            physics.position.offset = 0;
+	            break;
+	    }
+	
 	    var collision = new collisionComponent.RectCollisionComponent(this, 0.02);
 	    collision.onCollision = this.onCollision.bind(this);
 	
@@ -462,16 +481,30 @@
 
 	var PipeGraphicsComponent = function (entity) {
 	    this.entity = entity;
+	    this.canvas = document.getElementById('main-canvas');
 	};
 	
 	PipeGraphicsComponent.prototype.draw = function (context) {
 	    var position = this.entity.components.physics.position;
 	
 	    context.save();
-	    context.translate(position.x, position.y);
+	    if (position.topPipe) {
+	        context.translate(position.x, position.y + position.offset);
+	    } else {
+	        context.translate(position.x, position.y);
+	    }
+	
+	    console.log("y", position.y);
+	    console.log("offset", position.offset);
+	
 	    context.fillStyle = "green";
 	    context.beginPath();
-	    context.rect(0, 0, .1, .3);
+	    if (position.topPipe) {
+	        context.rect(0, 0, .1, .3 + position.offset);
+	    } else {
+	        context.rect(0, 0, .1, .3 - position.offset);
+	    }
+	
 	    context.closePath();
 	    context.fill();
 	    context.restore();
@@ -490,11 +523,12 @@
 	};
 	
 	PipeSpawnSystem.prototype.run = function () {
-	    this.interval = window.setInterval(this.tick.bind(this), 2000);
+	    this.interval = window.setInterval(this.tick.bind(this), 3000);
 	};
 	
 	PipeSpawnSystem.prototype.tick = function () {
-	    this.entities.push(new pipe.Pipe(0, 1), new pipe.Pipe(.7, 1));
+	    var offset = Math.floor(Math.random() * 3);
+	    this.entities.push(new pipe.Pipe(true, offset), new pipe.Pipe(false, offset));
 	};
 	
 	exports.PipeSpawnSystem = PipeSpawnSystem;

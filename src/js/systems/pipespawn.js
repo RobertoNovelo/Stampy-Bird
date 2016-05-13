@@ -5,11 +5,12 @@ var PipeSpawnSystem = function(entities) {
 };
 
 PipeSpawnSystem.prototype.run = function() {
-    this.interval = window.setInterval(this.tick.bind(this), 2000);
+    this.interval = window.setInterval(this.tick.bind(this), 500);
 }
 
 PipeSpawnSystem.prototype.tick = function() {
-    this.entities.push(new pipe.Pipe(0,1),new pipe.Pipe(.7,1));
+	var offset = Math.floor(Math.random() * 6);
+    this.entities.push(new pipe.Pipe(true,offset),new pipe.Pipe(false,offset));
 };
 
 exports.PipeSpawnSystem = PipeSpawnSystem;
