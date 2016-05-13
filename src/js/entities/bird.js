@@ -1,5 +1,6 @@
 var physicsComponent = require("../components/physics/physics");
 var graphicsComponent = require("../components/graphics/bird");
+var stampGraphicsComponent = require("../components/graphics/stamp");
 var collisionComponent = require("../components/collision/circle");
 // var settings = require("../settings");
 
@@ -8,9 +9,13 @@ var Bird = function() {
     physics.position.y = 0.5;
     physics.position.x = 0;
     this.radius = 0.02;
+    this.size = {
+        x: 0.1,
+        y: 0.1
+    };
     physics.acceleration.y = -2;
 
-    var graphics = new graphicsComponent.BirdGraphicsComponent(this);
+    var graphics = new stampGraphicsComponent.StampGraphicsComponent(this);
     var collision = new collisionComponent.CircleCollisionComponent(this, this.radius);
     collision.onCollision = this.onCollision.bind(this);
 

@@ -1,1 +1,1 @@
-{"version":3,"sources":["../src/css/index.less"],"names":[],"mappings":"AAAA;EACC,sBAAA;;AAGD;AAAM;EACF,WAAA;EACA,UAAA;EACA,WAAA;EACA,YAAA;;AAGJ,MAAM;EACF,WAAA;EACA,YAAA","file":"stampy-bird.css"}
+{"version":3,"sources":["../src/css/index.less"],"names":[],"mappings":"AAAA;EACC,sBAAA;;AAGD;AAAM;EACF,SAAA;EACA,UAAA;EACA,WAAA;EACA,YAAA;EACA,gBAAA;;AAGJ,MAAM;EACF,WAAA;EACA,YAAA;EACA,cAAA","file":"stampy-bird.css"}

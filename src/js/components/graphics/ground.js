@@ -8,7 +8,7 @@ GroundGraphicsComponent.prototype.draw = function(context) {
 
     context.save();
     context.translate(position.x, position.y);
-    context.fillStyle = "green";
+    context.fillStyle = "#403A20";
 	context.beginPath();
     context.rect(0, 0, this.canvas.width, .01);
 	context.closePath();

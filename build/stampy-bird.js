@@ -234,6 +234,7 @@
 
 	var physicsComponent = __webpack_require__(6);
 	var graphicsComponent = __webpack_require__(7);
+	var stampGraphicsComponent = __webpack_require__(18);
 	var collisionComponent = __webpack_require__(8);
 	// var settings = require("../settings");
 	
@@ -242,9 +243,13 @@
 	    physics.position.y = 0.5;
 	    physics.position.x = 0;
 	    this.radius = 0.02;
+	    this.size = {
+	        x: 0.1,
+	        y: 0.1
+	    };
 	    physics.acceleration.y = -2;
 	
-	    var graphics = new graphicsComponent.BirdGraphicsComponent(this);
+	    var graphics = new stampGraphicsComponent.StampGraphicsComponent(this);
 	    var collision = new collisionComponent.CircleCollisionComponent(this, this.radius);
 	    collision.onCollision = this.onCollision.bind(this);
 	
@@ -646,14 +651,14 @@
 	    if (topGround) {
 	        physics.position.y = 1;
 	        this.size = {
-	            x: 1,
+	            x: document.getElementById('main-canvas').width,
 	            y: 0.02
 	        };
 	    } else {
 	        physics.position.y = 0;
 	        this.size = {
 	            x: document.getElementById('main-canvas').width,
-	            y: 0.02
+	            y: 0.03
 	        };
 	    }
 	
@@ -689,7 +694,7 @@
 	
 	    context.save();
 	    context.translate(position.x, position.y);
-	    context.fillStyle = "green";
+	    context.fillStyle = "#403A20";
 	    context.beginPath();
 	    context.rect(0, 0, this.canvas.width, .01);
 	    context.closePath();
@@ -698,6 +703,26 @@
 	};
 	
 	exports.GroundGraphicsComponent = GroundGraphicsComponent;
+
+/***/ },
+/* 18 */
+/***/ function(module, exports) {
+
+	var StampGraphicsComponent = function (entity) {
+	    this.entity = entity;
+	};
+	
+	StampGraphicsComponent.prototype.draw = function (context) {
+	    var position = this.entity.components.physics.position;
+	    var size = this.entity.size;
+	
+	    context.save();
+	    context.fillStyle = "black";
+	    context.fillRect(position.x, position.y, size.x, size.y);
+	    context.restore();
+	};
+	
+	exports.StampGraphicsComponent = StampGraphicsComponent;
 
 /***/ }
 /******/ ]);

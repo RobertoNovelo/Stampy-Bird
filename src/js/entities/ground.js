@@ -12,7 +12,7 @@ var Ground = function(topGround)
     {
         physics.position.y = 1;
         this.size = {
-            x: 1,
+            x: (document.getElementById('main-canvas').width),
             y: 0.02
         };
     }
@@ -21,7 +21,7 @@ var Ground = function(topGround)
         physics.position.y = 0;
         this.size = {
             x: (document.getElementById('main-canvas').width),
-            y: 0.02
+            y: 0.03
         };
     }
 
