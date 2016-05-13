@@ -1,3 +1,7 @@
+@font-face {
+  font-family: StampyBird;
+  src: url(../src/font/DJBAlmostPerfect.ttf);
+}
 * {
   box-sizing: border-box;
 }
@@ -8,10 +12,81 @@ body {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  font-family: StampyBird;
+}
+html {
+  background: url(../src/img/beach-bg.png) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 canvas#main-canvas {
   width: 100%;
   height: 100%;
   display: block;
+}
+.uiscreen {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  overflow: auto;
+  display: none;
+}
+.homescreen .logo-container {
+  width: 100%;
+  display: block;
+  padding-top: 2rem;
+}
+.homescreen .logo-container .logo {
+  display: block;
+  width: 45%;
+  margin: auto;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.homescreen .options-container {
+  display: inline-flex;
+  justify-content: space-around;
+  width: 100%;
+  padding-top: 2rem;
+}
+.homescreen .options-container .option {
+  background-color: white;
+  border-radius: 6px;
+  width: 15rem;
+  border-right: 5px solid #125C71;
+  border-bottom: 5px solid #125C71;
+}
+.homescreen .options-container .option h1 {
+  text-align: center;
+  font-size: 3rem;
+  cursor: pointer;
+  margin: 0;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.homescreen .options-container .option:active {
+  background-color: #125C71;
+}
+.homescreen .options-container .option:active h1 {
+  color: white !important;
+}
+.homescreen .options-container .option:nth-child(1) h1 {
+  color: #D6212A;
+}
+.homescreen .options-container .option:nth-child(2) h1 {
+  color: #E5AB05;
+}
+.homescreen .options-container .option:nth-child(3) h1 {
+  color: #8EC63F;
 }
 /*# sourceMappingURL=stampy-bird.css.map */

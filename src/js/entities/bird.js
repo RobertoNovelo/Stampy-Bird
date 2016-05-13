@@ -10,8 +10,8 @@ var Bird = function() {
     physics.position.x = 0;
     this.radius = 0.02;
     this.size = {
-        x: 0.1,
-        y: 0.1
+        x: 0.07,
+        y: 0.07
     };
     physics.acceleration.y = -2;
 

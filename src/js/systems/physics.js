@@ -11,6 +11,10 @@ PhysicsSystem.prototype.run = function() {
     this.interval = window.setInterval(this.tick.bind(this), 1000 / 60);
 };
 
+PhysicsSystem.prototype.stop = function() {
+    clearInterval(this.interval);
+};
+
 PhysicsSystem.prototype.tick = function() {
     for (var i=0; i<this.entities.length; i++) {
         var entity = this.entities[i];
@@ -23,8 +27,5 @@ PhysicsSystem.prototype.tick = function() {
     this.collisionSystem.tick();
 };
 
-PhysicsSystem.prototype.pause = function() {
-    clearInterval(this.interval);
-}
 
 exports.PhysicsSystem = PhysicsSystem;

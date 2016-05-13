@@ -4,11 +4,22 @@ var GraphicsSystem = function(entities) {
     this.canvas = document.getElementById('main-canvas');
     // Context is what we draw to
     this.context = this.canvas.getContext('2d');
+
+    this.animframe = null;
+};
+
+GraphicsSystem.prototype.clearCanvas = function() {
+    // Run the render loop
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 };
 
 GraphicsSystem.prototype.run = function() {
     // Run the render loop
-    window.requestAnimationFrame(this.tick.bind(this));
+    this.animframe = window.requestAnimationFrame(this.tick.bind(this));
+};
+
+GraphicsSystem.prototype.stop = function() {
+    window.cancelAnimationFrame(this.animframe);
 };
 
 GraphicsSystem.prototype.tick = function() {
