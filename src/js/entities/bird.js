@@ -6,10 +6,12 @@ var collisionComponent = require("../components/collision/circle");
 var Bird = function() {
     var physics = new physicsComponent.PhysicsComponent(this);
     physics.position.y = 0.5;
+    physics.position.x = 0;
+    this.radius = 0.02;
     physics.acceleration.y = -2;
 
     var graphics = new graphicsComponent.BirdGraphicsComponent(this);
-    var collision = new collisionComponent.CircleCollisionComponent(this, 0.02);
+    var collision = new collisionComponent.CircleCollisionComponent(this, this.radius);
     collision.onCollision = this.onCollision.bind(this);
 
     this.components = {
@@ -20,7 +22,8 @@ var Bird = function() {
 };
 
 Bird.prototype.onCollision = function(entity) {
-    // console.log("Bird collided with entity:", entity);
+    console.log(this);
+    console.log("Bird collided with entity:", entity);
 };
 
 exports.Bird = Bird;

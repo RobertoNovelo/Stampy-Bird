@@ -40,7 +40,23 @@ var Pipe = function(topPipe,offset)
             break;
     }
 
-    var collision = new collisionComponent.RectCollisionComponent(this, 0.02);
+    if(topPipe)
+    {
+        this.size = {
+            x: 0.2,
+            y: .4 + physics.position.offset
+        };
+        physics.position.y = physics.position.y - physics.position.offset;
+    }
+    else
+    {
+        this.size = {
+            x: 0.2,
+            y: .4 - physics.position.offset
+        };
+    }
+
+    var collision = new collisionComponent.RectCollisionComponent(this, this.size);
     collision.onCollision = this.onCollision.bind(this);
 
     this.components = {
@@ -51,7 +67,8 @@ var Pipe = function(topPipe,offset)
 };
 
 Pipe.prototype.onCollision = function(entity) {
-    // console.log("Pipe collided with entity:", entity);
+    console.log(this);
+    console.log("Pipe collided with entity:", entity);
 };
 
 exports.Pipe = Pipe;

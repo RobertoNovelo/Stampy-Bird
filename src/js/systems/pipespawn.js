@@ -5,7 +5,7 @@ var PipeSpawnSystem = function(entities) {
 };
 
 PipeSpawnSystem.prototype.run = function() {
-    this.interval = window.setInterval(this.tick.bind(this), 500);
+    this.interval = window.setInterval(this.tick.bind(this), 3000);
 }
 
 PipeSpawnSystem.prototype.tick = function() {

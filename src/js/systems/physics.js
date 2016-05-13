@@ -21,11 +21,10 @@ PhysicsSystem.prototype.tick = function() {
         entity.components.physics.update(1/60);
     }
     this.collisionSystem.tick();
-    //console.log(this.entities.length);
 };
 
 PhysicsSystem.prototype.pause = function() {
-    clearInterval(this.interval);   
+    clearInterval(this.interval);
 }
 
 exports.PhysicsSystem = PhysicsSystem;
