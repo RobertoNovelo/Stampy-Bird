@@ -1,6 +1,4 @@
-var collisionSystem = require("./collision");
-
-var PhysicsSystem = function(entities) {
+var ScoreSystem = function(entities) {
     this.entities = entities;
     this.collisionSystem = new collisionSystem.CollisionSystem(entities);
     this.interval = null;

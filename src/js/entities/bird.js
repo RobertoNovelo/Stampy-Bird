@@ -6,14 +6,14 @@ var collisionComponent = require("../components/collision/circle");
 
 var Bird = function() {
     var physics = new physicsComponent.PhysicsComponent(this);
-    physics.position.y = 0.5;
-    physics.position.x = 0;
+    physics.position.y = 0.6;
+    physics.position.x = -0.1;
     this.radius = 0.02;
     this.size = {
         x: 0.07,
         y: 0.07
     };
-    physics.acceleration.y = -2;
+    physics.acceleration.y = 0;
 
     var graphics = new stampGraphicsComponent.StampGraphicsComponent(this);
     var collision = new collisionComponent.CircleCollisionComponent(this, this.radius);

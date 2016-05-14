@@ -44,7 +44,7 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	//Too lazy to do vanilla js :B
+	//Too lazy to do vanilla js, please do not judge me :B
 	window.$ = __webpack_require__(1);
 	var flappyBird = __webpack_require__(2);
 	
@@ -52,10 +52,33 @@
 		var app = new flappyBird.FlappyBird();
 	
 		$("#startGameBtn").on("click", function () {
-			$(".uiscreen").hide();
 			app.clearGame();
 			app.init();
-			app.run();
+			$("#score").text(0);
+			setTimeout(function () {
+				app.run();
+			}, 4000);
+			$(".uiscreen").hide();
+			$("#hint-screen").fadeIn();
+			$("#readysetgo-screen").show();
+			$("#readysetgo-screen h1").hide();
+			$("#rsg3").fadeIn(800, function () {
+				$("#rsg3").fadeOut(800, function () {
+					$("#rsg2").fadeIn(800, function () {
+						$("#rsg2").fadeOut(800, function () {
+							$("#rsg1").fadeIn(800, function () {
+								$("#rsg1").fadeOut("fast", function () {
+									$("#readysetgo-screen").hide();
+									setTimeout(function () {
+										$("#hint-screen").fadeOut();
+										$("#score-container").fadeIn();
+									}, 3000);
+								});
+							});
+						});
+					});
+				});
+			});
 		});
 	
 		$("#selectStampBtn").on("click", function () {});
@@ -9926,22 +9949,25 @@
 	var pipe = __webpack_require__(14);
 	var ground = __webpack_require__(19);
 	var pipecleaner = __webpack_require__(16);
-	var scoreblock = __webpack_require__(11);
+	// var scoreblock = require('./entities/scoreblock');
 	
 	var FlappyBird = function () {
-	    this.entities = [];
-	    this.graphics = null;
-	    this.physics = null;
-	    this.input = null;
-	    this.pipespawn = null;
-	};
-	
-	FlappyBird.prototype.init = function () {
-	    this.entities = [new bird.Bird(), new pipecleaner.PipeCleaner(), new ground.Ground(true), new ground.Ground(false), new scoreblock.ScoreBlock()];
+	    this.entities = [new bird.Bird(), new pipecleaner.PipeCleaner(), new ground.Ground(true), new ground.Ground(false)];
 	    this.graphics = new graphicsSystem.GraphicsSystem(this.entities);
 	    this.physics = new physicsSystem.PhysicsSystem(this.entities);
 	    this.input = new inputSystem.InputSystem(this.entities);
 	    this.pipespawn = new pipeSpawnSystem.PipeSpawnSystem(this.entities);
+	};
+	
+	FlappyBird.prototype.init = function () {
+	    var bird = this.entities[0];
+	    bird.components.physics.position.y = 0.6;
+	    bird.components.physics.position.x = -0.1;
+	    bird.components.physics.acceleration.y = 0;
+	    setTimeout(function () {
+	        bird.components.physics.acceleration.y = -2;
+	    }, 6000);
+	    this.entities.splice(5, this.entities.length - 5);
 	};
 	
 	FlappyBird.prototype.run = function () {
@@ -9961,11 +9987,7 @@
 	    var canvas = document.getElementById('main-canvas');
 	    var context = canvas.getContext('2d');
 	    context.clearRect(0, 0, canvas.width, canvas.height);
-	    this.entities = [];
-	    this.graphics = null;
-	    this.physics = null;
-	    this.input = null;
-	    this.pipespawn = null;
+	    this.stop();
 	};
 	
 	exports.FlappyBird = FlappyBird;
@@ -10045,7 +10067,8 @@
 	};
 	
 	PhysicsSystem.prototype.stop = function () {
-	    clearInterval(this.interval);
+	    var that = this;
+	    clearInterval(that.interval);
 	};
 	
 	PhysicsSystem.prototype.tick = function () {
@@ -10069,7 +10092,6 @@
 	var graphicsSystem = __webpack_require__(3);
 	
 	var bird = __webpack_require__(6);
-	var scoreblock = __webpack_require__(11);
 	var pipe = __webpack_require__(14);
 	var pipecleaner = __webpack_require__(16);
 	
@@ -10112,15 +10134,11 @@
 	        entityA.components.collision.onCollision(entityB);
 	
 	        if (entityA instanceof bird.Bird) {
-	          this.entities.splice(5, this.entities.length - 5);
-	        }
-	
-	        if (entityA instanceof bird.Bird && entityA instanceof scoreblock.ScoreBlock) {
-	          console.log("score ++");
+	          this.entities.splice(4, this.entities.length - 4);
 	        }
 	
 	        if (entityA instanceof pipecleaner.PipeCleaner) {
-	          this.entities.splice(5, 2);
+	          this.entities.splice(4, 2);
 	        }
 	      }
 	
@@ -10128,7 +10146,7 @@
 	        entityB.components.collision.onCollision(entityA);
 	        if (entityB instanceof bird.Bird) {
 	          //takes all pipes off
-	          this.entities.splice(5, this.entities.length - 5);
+	          this.entities.splice(4, this.entities.length - 4);
 	        }
 	      }
 	    }
@@ -10149,14 +10167,14 @@
 	
 	var Bird = function () {
 	    var physics = new physicsComponent.PhysicsComponent(this);
-	    physics.position.y = 0.5;
-	    physics.position.x = 0;
+	    physics.position.y = 0.6;
+	    physics.position.x = -0.1;
 	    this.radius = 0.02;
 	    this.size = {
 	        x: 0.07,
 	        y: 0.07
 	    };
-	    physics.acceleration.y = -2;
+	    physics.acceleration.y = 0;
 	
 	    var graphics = new stampGraphicsComponent.StampGraphicsComponent(this);
 	    var collision = new collisionComponent.CircleCollisionComponent(this, this.radius);
@@ -10318,41 +10336,7 @@
 	exports.CircleCollisionComponent = CircleCollisionComponent;
 
 /***/ },
-/* 11 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var graphicsComponent = __webpack_require__(12);
-	var physicsComponent = __webpack_require__(7);
-	var collisionComponent = __webpack_require__(13);
-	
-	var ScoreBlock = function () {
-	  this.size = {
-	    x: 0.001,
-	    y: 0.001
-	  };
-	
-	  var physics = new physicsComponent.PhysicsComponent(this);
-	  physics.position.x = 0;
-	  physics.position.y = 0;
-	
-	  var graphics = new graphicsComponent.RectGraphicsComponent(this);
-	  var collision = new collisionComponent.RectCollisionComponent(this, this.size);
-	  collision.onCollision = this.onCollision.bind(this);
-	
-	  this.components = {
-	    physics: physics,
-	    graphics: graphics,
-	    collision: collision
-	  };
-	};
-	
-	ScoreBlock.prototype.onCollision = function (entity) {
-	  console.log("score ++");
-	};
-	
-	exports.ScoreBlock = ScoreBlock;
-
-/***/ },
+/* 11 */,
 /* 12 */
 /***/ function(module, exports) {
 
@@ -10574,6 +10558,9 @@
 	InputSystem.prototype.onClick = function () {
 	    var bird = this.entities[0];
 	    bird.components.physics.velocity.y = 0.7;
+	    if (0 == bird.components.physics.acceleration.y) {
+	        bird.components.physics.acceleration.y = -2;
+	    }
 	};
 	
 	exports.InputSystem = InputSystem;

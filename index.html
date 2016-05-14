@@ -8,6 +8,17 @@
 </head>
 <body>
 	<canvas id="main-canvas"></canvas>
+	<div id="score-container">
+		<h1>Score: <span id="score">0</span></h1>
+	</div>
+	<div id="hint-screen">
+		<h1>Tap or click on the screen to score points!</h1>
+	</div>
+	<div id="readysetgo-screen" class="uiscreen readysetgoscreen">
+		<h1 id="rsg3">3</h1>
+		<h1 id="rsg2">2</h1>
+		<h1 id="rsg1">1</h1>
+	</div>
 	<div id="home-screen" class="uiscreen homescreen">
 		<div class="logo-container">
 			<object type="image/svg+xml" data="src/img/logo-02.svg" class="logo">
@@ -18,7 +29,7 @@
 			<div class="option">
 				<h1>Scores</h1>
 			</div>
-			<div class="option">
+			<div id="startGameBtn" class="option">
 				<h1>Play!</h1>
 			</div>
 			<div class="option">

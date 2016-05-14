@@ -7,22 +7,25 @@ var bird = require('./entities/bird');
 var pipe = require('./entities/pipe');
 var ground = require('./entities/ground');
 var pipecleaner = require('./entities/pipecleaner');
-var scoreblock = require('./entities/scoreblock');
+// var scoreblock = require('./entities/scoreblock');
 
 var FlappyBird = function() {
-    this.entities = [];
-	this.graphics = null;
-	this.physics = null;
-	this.input = null;
-	this.pipespawn = null;
-};
-
-FlappyBird.prototype.init = function() {
-	this.entities = [new bird.Bird(),new pipecleaner.PipeCleaner(),new ground.Ground(true),new ground.Ground(false),new scoreblock.ScoreBlock()];
+    this.entities = [new bird.Bird(),new pipecleaner.PipeCleaner(),new ground.Ground(true),new ground.Ground(false)];
     this.graphics = new graphicsSystem.GraphicsSystem(this.entities);
     this.physics = new physicsSystem.PhysicsSystem(this.entities);
     this.input = new inputSystem.InputSystem(this.entities);
     this.pipespawn = new pipeSpawnSystem.PipeSpawnSystem(this.entities);
+};
+
+FlappyBird.prototype.init = function() {
+    var bird = this.entities[0];
+    bird.components.physics.position.y = 0.6;
+    bird.components.physics.position.x = -0.1;
+    bird.components.physics.acceleration.y = 0;
+    setTimeout(function(){
+        bird.components.physics.acceleration.y = -2;
+    },6000);
+    this.entities.splice(5, this.entities.length-5);
 };
 
 FlappyBird.prototype.run = function() {
@@ -42,11 +45,7 @@ FlappyBird.prototype.clearGame = function() {
     var canvas = document.getElementById('main-canvas');
     var context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
-	this.entities = [];
-	this.graphics = null;
-	this.physics = null;
-	this.input = null;
-	this.pipespawn = null;
+    this.stop();
 };
 
 exports.FlappyBird = FlappyBird;

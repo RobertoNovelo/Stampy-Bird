@@ -1,7 +1,6 @@
 var graphicsSystem = require('./graphics');
 
 var bird = require('../entities/bird');
-var scoreblock = require('../entities/scoreblock');
 var pipe = require('../entities/pipe');
 var pipecleaner = require('../entities/pipecleaner');
 
@@ -44,15 +43,11 @@ CollisionSystem.prototype.tick = function() {
         entityA.components.collision.onCollision(entityB);
 
         if (entityA instanceof bird.Bird) {
-          this.entities.splice(5, this.entities.length-5);
-        }
-
-        if (entityA instanceof bird.Bird && entityA instanceof scoreblock.ScoreBlock ) {
-          console.log("score ++");
+          this.entities.splice(4, this.entities.length-4);
         }
 
         if (entityA instanceof pipecleaner.PipeCleaner){
-          this.entities.splice(5,2);
+          this.entities.splice(4,2);
         }
       }
 
@@ -60,7 +55,7 @@ CollisionSystem.prototype.tick = function() {
         entityB.components.collision.onCollision(entityA);
         if (entityB instanceof bird.Bird) {
           //takes all pipes off
-          this.entities.splice(5, this.entities.length-5);
+          this.entities.splice(4, this.entities.length-4);
         }
 
       }
