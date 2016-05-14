@@ -10,6 +10,15 @@
   -ms-user-select: none;
   user-select: none;
 }
+*:focus {
+  outline: none;
+}
+input,
+select,
+textarea,
+button {
+  font-family: inherit;
+}
 html,
 body {
   margin: 0;
@@ -126,5 +135,56 @@ canvas#main-canvas {
 #score-container h1 {
   font-size: 4rem;
   color: #125C71;
+}
+#promptsavescore-container {
+  position: fixed;
+  top: 7rem;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  display: none;
+  z-index: 10;
+}
+#promptsavescore-container h1 {
+  font-size: 4rem;
+  color: #125C71;
+}
+#promptsavescore-container .playername {
+  display: block;
+  width: 50%;
+  margin: 0 auto;
+  margin-top: 3rem;
+  color: #125C71;
+  background-color: white;
+  height: 5rem;
+  border-radius: 6px;
+  border: none;
+  font-size: 3rem;
+  text-align: center;
+}
+#promptsavescore-container .options-container {
+  display: inline-flex;
+  justify-content: space-around;
+  width: 50%;
+  padding-top: 2rem;
+}
+#promptsavescore-container .options-container .option {
+  background-color: white;
+  border-radius: 6px;
+  width: 15rem;
+  border-right: 5px solid #125C71;
+  border-bottom: 5px solid #125C71;
+}
+#promptsavescore-container .options-container .option h1 {
+  text-align: center;
+  font-size: 3rem;
+  cursor: pointer;
+  margin: 0;
+}
+#promptsavescore-container .options-container .option:active {
+  background-color: #125C71;
+}
+#promptsavescore-container .options-container .option:active h1 {
+  color: white !important;
 }
 /*# sourceMappingURL=stampy-bird.css.map */

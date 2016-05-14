@@ -1,9 +1,9 @@
 var collisionSystem = require("./collision");
 
-var PhysicsSystem = function(entities) {
+var PhysicsSystem = function(entities,pipeSpawnSystem,graphicsSystem,scoreSystem)
+{
     this.entities = entities;
-    this.collisionSystem = new collisionSystem.CollisionSystem(entities);
-    this.interval = null;
+    this.collisionSystem = new collisionSystem.CollisionSystem(entities,pipeSpawnSystem,graphicsSystem,scoreSystem);
 };
 
 PhysicsSystem.prototype.run = function() {
@@ -11,9 +11,9 @@ PhysicsSystem.prototype.run = function() {
     this.interval = window.setInterval(this.tick.bind(this), 1000 / 60);
 };
 
-PhysicsSystem.prototype.stop = function() {
-    var that = this;
-    clearInterval(that.interval);
+PhysicsSystem.prototype.stop = function()
+{
+    clearInterval(this.interval);
 };
 
 PhysicsSystem.prototype.tick = function() {

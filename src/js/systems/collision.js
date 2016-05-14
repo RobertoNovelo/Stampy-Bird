@@ -1,14 +1,13 @@
-var graphicsSystem = require('./graphics');
-
 var bird = require('../entities/bird');
 var pipe = require('../entities/pipe');
 var pipecleaner = require('../entities/pipecleaner');
 
-var CollisionSystem = function(entities, physics) {
+var CollisionSystem = function(entities,pipeSpawnSystem,graphicsSystem,scoreSystem) {
   this.entities = entities;
-  this.physics = physics;
   this.interval = null;
-  this.graphicsSystem = new graphicsSystem.GraphicsSystem();
+  this.graphicsSystem = graphicsSystem;
+  this.pipeSpawnSystem = pipeSpawnSystem;
+  this.scoreSystem = scoreSystem;
 };
 
 CollisionSystem.prototype.run = function() {
@@ -44,6 +43,11 @@ CollisionSystem.prototype.tick = function() {
 
         if (entityA instanceof bird.Bird) {
           this.entities.splice(4, this.entities.length-4);
+          this.scoreSystem.enable(false);
+          this.graphicsSystem.stop();
+          this.pipeSpawnSystem.stop();
+          this.stop();
+          $("#promptsavescore-container").fadeIn();
         }
 
         if (entityA instanceof pipecleaner.PipeCleaner){
@@ -54,8 +58,12 @@ CollisionSystem.prototype.tick = function() {
       if (entityB.components.collision.onCollision) {
         entityB.components.collision.onCollision(entityA);
         if (entityB instanceof bird.Bird) {
-          //takes all pipes off
           this.entities.splice(4, this.entities.length-4);
+          this.scoreSystem.enable(false);
+          this.graphicsSystem.stop();
+          this.pipeSpawnSystem.stop();
+          this.stop();
+          $("#promptsavescore-container").fadeIn();
         }
 
       }

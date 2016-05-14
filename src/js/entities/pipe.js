@@ -67,8 +67,8 @@ var Pipe = function(topPipe,offset)
 };
 
 Pipe.prototype.onCollision = function(entity) {
-    console.log(this);
-    console.log("Pipe collided with entity:", entity);
+    // console.log(this);
+    // console.log("Pipe collided with entity:", entity);
 };
 
 exports.Pipe = Pipe;

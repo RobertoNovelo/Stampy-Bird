@@ -9,11 +9,11 @@ $(function()
 	$("#startGameBtn").on("click", function()
 	{
 		app.clearGame();
-		app.init();
 		$("#score").text(0);
 		setTimeout(function(){
+			app.init();
 			app.run()
-		},4000);
+		},4500);
 		$(".uiscreen").hide();
 		$("#hint-screen").fadeIn();
 		$("#readysetgo-screen").show();
@@ -25,11 +25,8 @@ $(function()
 						$("#rsg1").fadeIn(800,function(){
 							$("#rsg1").fadeOut("fast",function(){
 								$("#readysetgo-screen").hide();
-								setTimeout(function()
-								{
-									$("#hint-screen").fadeOut();
-									$("#score-container").fadeIn();
-								},3000);
+								$("#hint-screen").fadeOut();
+								$("#score-container").fadeIn();
 							});
 						});
 					});
@@ -47,6 +44,14 @@ $(function()
 	{
 
 	});
+
+	$("#savescore-no").on("click", function()
+	{
+		$("#score-container").fadeOut();
+		$("#promptsavescore-container").fadeOut();
+		$("#home-screen").fadeIn();
+	});
+
 
 	$("#home-screen").show();
 });

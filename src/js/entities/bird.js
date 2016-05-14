@@ -27,8 +27,8 @@ var Bird = function() {
 };
 
 Bird.prototype.onCollision = function(entity) {
-    console.log(this);
-    console.log("Bird collided with entity:", entity);
+    // console.log(this);
+    // console.log("Bird collided with entity:", entity);
 };
 
 exports.Bird = Bird;

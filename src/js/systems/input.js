@@ -1,11 +1,8 @@
-var InputSystem = function(entities) {
+var InputSystem = function(entities,scoreSystem) {
     this.entities = entities;
-
+    this.scoreSystem = scoreSystem;
     // Canvas is where we get input from
     this.canvas = document.getElementById('main-canvas');
-};
-
-InputSystem.prototype.run = function() {
     this.canvas.addEventListener('click', this.onClick.bind(this));
 };
 
@@ -16,6 +13,8 @@ InputSystem.prototype.onClick = function() {
     {
     	bird.components.physics.acceleration.y = -2;
     }
+    this.scoreSystem.plusPlus();
+    $("#score").text(this.scoreSystem.getScore());
 };
 
 exports.InputSystem = InputSystem;
