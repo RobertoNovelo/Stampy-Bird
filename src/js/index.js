@@ -5,7 +5,29 @@ var flappyBird = require('./flappy_bird');
 $(function()
 {
 	var app = new flappyBird.FlappyBird();
-	app.updateBirdImage("https://about.usps.com/postal-bulletin/2007/html/pb22203/images/info2.5.4.1.jpg");
+	var stamps = [];
+
+	function loadStampImages()
+	{
+		$.getJSON("stamps.json", function(json)
+		{
+			stamps = json.stamps;
+
+			if(null === localStorage.getItem("currentStampImageIndex"))
+			{
+				app.updateBirdImage(stamps[0].image);
+				localStorage.setItem("currentStampImageIndex",0);
+			}
+			else
+			{
+				app.updateBirdImage(stamps[parseInt(localStorage.getItem("currentStampImageIndex"))].image);
+			}
+
+			updateStampSelectScreen();
+		});
+	}
+
+	loadStampImages();
 
 	$("#startGameBtn").on("click", function()
 	{
@@ -13,7 +35,7 @@ $(function()
 		$("#score").text(0);
 		setTimeout(function(){
 			app.init();
-			app.run()
+			app.run();
 		},4500);
 		$(".uiscreen").hide();
 		$("#hint-screen").fadeIn();
@@ -38,7 +60,22 @@ $(function()
 
 	$("#selectStampBtn").on("click", function()
 	{
+		$("#home-screen").fadeOut();
+		$("#selectstamp-screen").fadeIn();
+	});
 
+	$("#goBackStampsBtn").on("click", function()
+	{
+		$("#selectstamp-screen").fadeOut();
+		$("#home-screen").fadeIn();
+	});
+
+	$("#selectstamp-screen .container").on("click",".stamp", function()
+	{
+		app.updateBirdImage(stamps[parseInt($(this).data("stampindex"))].image);
+		localStorage.setItem("currentStampImageIndex",parseInt($(this).data("stampindex")));
+		$("#selectstamp-screen").fadeOut();
+		$("#home-screen").fadeIn();
 	});
 
 	$("#leaderBoardBtn").on("click", function()
@@ -56,10 +93,10 @@ $(function()
 
 	$("#savescore-yes").on("click", function()
 	{
-		if("" == $("#playernameinput").val().replace(/ /g,""))
+		if("" === $("#playernameinput").val().replace(/ /g,""))
 		{
 			$("#promptsavescore-container>h1").text("Please enter your name!");
-			$("#promptsavescore-container>h1").css("color","#D6212A");
+			$("#promptsavescore-container>h1").css("color","#E5AB05");
 			setTimeout(function()
 			{
 				if("Please enter your name!" == $("#promptsavescore-container>h1").text())
@@ -71,7 +108,7 @@ $(function()
 		}
 		else
 		{
-			if(app.scoreSystem.saveScoreAndResetAndIsHighScore($("#playernameinput").val(),0))
+			if(app.scoreSystem.saveScoreAndResetAndIsHighScore($("#playernameinput").val(),parseInt(localStorage.getItem("currentStampImageIndex"))))
 			{
 				updateScoresScreen();
 				// $("#playerscores-screen .container .ranking:first-child").addClass("highscore");
@@ -108,13 +145,28 @@ $(function()
 			'<div class="ranking">'+
 				'<h1>'+(index+1)+'</h1>'+
 				'<div class="stamp">'+
-					'<img src="https://about.usps.com/postal-bulletin/2007/html/pb22203/images/info2.5.4.1.jpg" alt="">'+
+					'<img src="'+ stamps[ranking.stampIndex].image +'" alt="">'+
 				'</div>'+
 				'<h1>'+ranking.playerName+'</h1>'+
 				'<h1 class="score">'+ ranking.score +' Points</h1>'+
 			'</div>';
-		})
+		});
 
 		$("#playerscores-screen .container").append(rankingsString);
+	};
+
+	var updateStampSelectScreen = function()
+	{
+		var stampStr = "";
+		stamps.forEach(function(stamp,index)
+		{
+			stampStr += '' +
+			'<div class="stamp" data-stampindex="'+index+'">' +
+				'<h1>'+ stamp.stamp_name +'</h1>' +
+				'<img src="'+ stamp.image +'" alt="">' +
+			'</div>';
+		});
+
+		$("#selectstamp-screen .container").append(stampStr);
 	};
 });
