@@ -63,6 +63,32 @@ canvas#main-canvas {
 .readysetgoscreen h1:nth-child(3) {
   color: #8EC63F;
 }
+@media only screen and (max-width: 768px) {
+  .readysetgoscreen {
+    margin-top: 2rem;
+  }
+}
+.homescreen #current-stamp {
+  position: fixed;
+  top: 2rem;
+  left: 8%;
+  width: 12rem;
+  text-align: center;
+}
+@media only screen and (max-width: 760px) {
+  .homescreen #current-stamp {
+    top: 50%;
+    left: 10%;
+    width: 80%;
+  }
+}
+.homescreen #current-stamp h1 {
+  font-size: 1.5rem;
+}
+.homescreen #current-stamp img {
+  margin: auto;
+  width: 70%;
+}
 .homescreen .logo-container {
   width: 100%;
   display: block;
@@ -131,6 +157,11 @@ canvas#main-canvas {
   font-size: 3rem;
   color: #125C71;
 }
+@media only screen and (max-width: 768px) {
+  #hint-screen h1 {
+    font-size: 2rem;
+  }
+}
 #readysetgo-screen {
   overflow: hidden !important;
 }
@@ -159,6 +190,11 @@ canvas#main-canvas {
 #promptsavescore-container h1 {
   font-size: 4rem;
   color: #125C71;
+}
+@media only screen and (max-width: 768px) {
+  #promptsavescore-container h1 {
+    font-size: 2rem;
+  }
 }
 #promptsavescore-container .playername {
   display: block;

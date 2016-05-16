@@ -7,9 +7,18 @@
 	<link rel="stylesheet" type="text/css" href="build/stampy-bird.css">
 </head>
 <body>
+	<!-- GAME UI -->
 	<canvas id="main-canvas"></canvas>
 	<div id="score-container">
 		<h1>Score: <span id="score">0</span></h1>
+	</div>
+	<div id="hint-screen">
+		<h1>Tap or click on the screen to score points!</h1>
+	</div>
+	<div id="readysetgo-screen" class="uiscreen readysetgoscreen">
+		<h1 id="rsg3">3</h1>
+		<h1 id="rsg2">2</h1>
+		<h1 id="rsg1">1</h1>
 	</div>
 	<div id="promptsavescore-container" class="uiscreen">
 		<h1>Enter your name to save your score!</h1>
@@ -23,15 +32,13 @@
 			</div>
 		</div>
 	</div>
-	<div id="hint-screen">
-		<h1>Tap or click on the screen to score points!</h1>
-	</div>
-	<div id="readysetgo-screen" class="uiscreen readysetgoscreen">
-		<h1 id="rsg3">3</h1>
-		<h1 id="rsg2">2</h1>
-		<h1 id="rsg1">1</h1>
-	</div>
+	<!-- /GAME UI -->
+	<!-- HOME UI -->
 	<div id="home-screen" class="uiscreen homescreen">
+		<div id="current-stamp">
+			<h1>Current stamp:</h1>
+			<img src="" alt="">
+		</div>
 		<div class="logo-container">
 			<object type="image/svg+xml" data="src/img/logo-02.svg" class="logo">
 				Stampy Bird Logo <!-- fallback image in CSS -->
@@ -67,6 +74,7 @@
 		<div class="container">
 		</div>
 	</div>
+	<!-- /GAME UI -->
 	<script src="build/stampy-bird.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>

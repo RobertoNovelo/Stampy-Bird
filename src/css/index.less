@@ -77,10 +77,42 @@ canvas#main-canvas {
 	{
 		color: #8EC63F;
 	}
+
+	@media only screen and (max-width : 768px)
+	{
+		margin-top: 2rem;
+	}
 }
 
 .homescreen
 {
+
+	#current-stamp
+	{
+		position: fixed;
+		top: 2rem;
+		left: 8%;
+		width: 12rem;
+		text-align: center;
+
+		@media only screen and (max-width : 760px)
+		{
+			top:50%;
+			left: 10%;
+			width: 80%;
+		}
+
+		h1
+		{
+			font-size: 1.5rem;
+		}
+
+		img
+		{
+			margin: auto;
+			width: 70%;
+		}
+	}
 
 	.logo-container
 	{
@@ -172,6 +204,10 @@ canvas#main-canvas {
 	{
 		font-size: 3rem;
 		color: #125C71;
+		@media only screen and (max-width : 768px)
+		{
+			font-size: 2rem;
+		}
 	}
 }
 
@@ -211,6 +247,11 @@ canvas#main-canvas {
 	{
 		font-size: 4rem;
 		color: #125C71;
+
+		@media only screen and (max-width : 768px)
+		{
+			font-size: 2rem;
+		}
 	}
 
 	.playername

@@ -24,6 +24,7 @@ $(function()
 			}
 
 			updateStampSelectScreen();
+			updateCurrentStamp();
 		});
 	}
 
@@ -76,6 +77,7 @@ $(function()
 		localStorage.setItem("currentStampImageIndex",parseInt($(this).data("stampindex")));
 		$("#selectstamp-screen").fadeOut();
 		$("#home-screen").fadeIn();
+		updateCurrentStamp();
 	});
 
 	$("#leaderBoardBtn").on("click", function()
@@ -153,6 +155,11 @@ $(function()
 		});
 
 		$("#playerscores-screen .container").append(rankingsString);
+	};
+
+	var updateCurrentStamp = function()
+	{
+		$("#current-stamp img").attr("src",stamps[parseInt(localStorage.getItem("currentStampImageIndex"))].image);
 	};
 
 	var updateStampSelectScreen = function()
