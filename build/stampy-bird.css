@@ -178,6 +178,11 @@ canvas#main-canvas {
   font-size: 4rem;
   color: #125C71;
 }
+@media only screen and (max-width: 768px) {
+  #score-container h1 {
+    font-size: 3rem;
+  }
+}
 #promptsavescore-container {
   position: fixed;
   top: 7rem;
