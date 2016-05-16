@@ -7,11 +7,11 @@ var collisionComponent = require("../components/collision/circle");
 var Bird = function() {
     var physics = new physicsComponent.PhysicsComponent(this);
     physics.position.y = 0.6;
-    physics.position.x = 0.2;
+    physics.position.x = 0;
     this.radius = 0.02;
     this.size = {
-        x: 0.07,
-        y: 0.07
+        x: 0.1,
+        y: 0.1
     };
     physics.acceleration.y = 0;
 
@@ -22,9 +22,14 @@ var Bird = function() {
     this.components = {
         physics: physics,
         graphics: graphics,
-        collision: collision
+        collision: collision,
     };
 };
+
+Bird.prototype.updateImage = function(imageUrl) {
+    this.components.graphics.updateImage(imageUrl);
+};
+
 
 Bird.prototype.onCollision = function(entity) {
     // console.log(this);

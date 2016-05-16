@@ -19,6 +19,11 @@ var FlappyBird = function() {
     this.input = new inputSystem.InputSystem(this.entities,this.scoreSystem);
 };
 
+FlappyBird.prototype.updateBirdImage = function(imageUrl)
+{
+    this.entities[0].updateImage(imageUrl);
+};
+
 FlappyBird.prototype.init = function() {
     var bird = this.entities[0];
     bird.components.physics.position.y = 0.6;

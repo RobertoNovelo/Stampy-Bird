@@ -5,6 +5,7 @@ var flappyBird = require('./flappy_bird');
 $(function()
 {
 	var app = new flappyBird.FlappyBird();
+	app.updateBirdImage("https://about.usps.com/postal-bulletin/2007/html/pb22203/images/info2.5.4.1.jpg");
 
 	$("#startGameBtn").on("click", function()
 	{

@@ -50,6 +50,7 @@
 	
 	$(function () {
 		var app = new flappyBird.FlappyBird();
+		app.updateBirdImage("https://about.usps.com/postal-bulletin/2007/html/pb22203/images/info2.5.4.1.jpg");
 	
 		$("#startGameBtn").on("click", function () {
 			app.clearGame();
@@ -10009,6 +10010,10 @@
 	    this.input = new inputSystem.InputSystem(this.entities, this.scoreSystem);
 	};
 	
+	FlappyBird.prototype.updateBirdImage = function (imageUrl) {
+	    this.entities[0].updateImage(imageUrl);
+	};
+	
 	FlappyBird.prototype.init = function () {
 	    var bird = this.entities[0];
 	    bird.components.physics.position.y = 0.6;
@@ -10227,11 +10232,11 @@
 	var Bird = function () {
 	    var physics = new physicsComponent.PhysicsComponent(this);
 	    physics.position.y = 0.6;
-	    physics.position.x = 0.2;
+	    physics.position.x = 0;
 	    this.radius = 0.02;
 	    this.size = {
-	        x: 0.07,
-	        y: 0.07
+	        x: 0.1,
+	        y: 0.1
 	    };
 	    physics.acceleration.y = 0;
 	
@@ -10244,6 +10249,10 @@
 	        graphics: graphics,
 	        collision: collision
 	    };
+	};
+	
+	Bird.prototype.updateImage = function (imageUrl) {
+	    this.components.graphics.updateImage(imageUrl);
 	};
 	
 	Bird.prototype.onCollision = function (entity) {
@@ -10312,16 +10321,36 @@
 
 	var StampGraphicsComponent = function (entity) {
 	    this.entity = entity;
+	    this.image = null;
+	    imageLoaded = false;
+	    this.setImageLoaded = function () {
+	        imageLoaded = true;
+	    };
 	};
 	
 	StampGraphicsComponent.prototype.draw = function (context) {
 	    var position = this.entity.components.physics.position;
 	    var size = this.entity.size;
 	
-	    context.save();
-	    context.fillStyle = "black";
-	    context.fillRect(position.x, position.y, size.x, size.y);
-	    context.restore();
+	    if (imageLoaded) {
+	        context.save();
+	        context.translate(position.x, position.y);
+	        context.rotate(Math.PI);
+	        context.drawImage(this.image, -0.1, 0, this.image.width * (0.1 / this.image.height), 0.1);
+	        context.restore();
+	    } else {
+	        context.save();
+	        context.fillStyle = "black";
+	        context.fillRect(position.x, position.y, size.x, size.y);
+	        context.restore();
+	    }
+	};
+	
+	StampGraphicsComponent.prototype.updateImage = function (imageUrl) {
+	    this.imageLoaded = false;
+	    this.image = new Image();
+	    this.image.onload = this.setImageLoaded;
+	    this.image.src = imageUrl;
 	};
 	
 	exports.StampGraphicsComponent = StampGraphicsComponent;
