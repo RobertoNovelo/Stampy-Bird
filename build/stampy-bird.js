@@ -81,7 +81,40 @@
 	
 		$("#selectStampBtn").on("click", function () {});
 	
-		$("#leaderBoardBtn").on("click", function () {});
+		$("#leaderBoardBtn").on("click", function () {
+			updateScoresScreen();
+			$("#home-screen").fadeOut();
+			$("#playerscores-screen").fadeIn();
+		});
+	
+		$("#goBackScoresBtn").on("click", function () {
+			$("#playerscores-screen").fadeOut();
+			$("#home-screen").fadeIn();
+		});
+	
+		$("#savescore-yes").on("click", function () {
+			if ("" == $("#playernameinput").val().replace(/ /g, "")) {
+				$("#promptsavescore-container>h1").text("Please enter your name!");
+				$("#promptsavescore-container>h1").css("color", "#D6212A");
+				setTimeout(function () {
+					if ("Please enter your name!" == $("#promptsavescore-container>h1").text()) {
+						$("#promptsavescore-container>h1").css("color", "#125C71");
+						$("#promptsavescore-container>h1").text("Enter your name to save your score!");
+					}
+				}, 2000);
+			} else {
+				if (app.scoreSystem.saveScoreAndResetAndIsHighScore($("#playernameinput").val(), 0)) {
+					updateScoresScreen();
+					// $("#playerscores-screen .container .ranking:first-child").addClass("highscore");
+					// TODO: Something way beter than that ^^^^^ :B
+				} else {
+						updateScoresScreen();
+					}
+				$("#score-container").fadeOut();
+				$("#promptsavescore-container").fadeOut();
+				$("#playerscores-screen").fadeIn();
+			}
+		});
 	
 		$("#savescore-no").on("click", function () {
 			$("#score-container").fadeOut();
@@ -90,6 +123,17 @@
 		});
 	
 		$("#home-screen").show();
+	
+		var updateScoresScreen = function () {
+			$("#playerscores-screen .container").empty();
+			var rankingsString = "";
+	
+			app.scoreSystem.getLeaderBoard().forEach(function (ranking, index) {
+				rankingsString += '' + '<div class="ranking">' + '<h1>' + (index + 1) + '</h1>' + '<div class="stamp">' + '<img src="https://about.usps.com/postal-bulletin/2007/html/pb22203/images/info2.5.4.1.jpg" alt="">' + '</div>' + '<h1>' + ranking.playerName + '</h1>' + '<h1 class="score">' + ranking.score + ' Points</h1>' + '</div>';
+			});
+	
+			$("#playerscores-screen .container").append(rankingsString);
+		};
 	});
 
 /***/ },
@@ -9968,7 +10012,7 @@
 	FlappyBird.prototype.init = function () {
 	    var bird = this.entities[0];
 	    bird.components.physics.position.y = 0.6;
-	    bird.components.physics.position.x = -0.1;
+	    bird.components.physics.position.x = -0.05;
 	    bird.components.physics.velocity.y = 0;
 	    bird.components.physics.acceleration.y = 0;
 	    setTimeout(function () {
@@ -10183,7 +10227,7 @@
 	var Bird = function () {
 	    var physics = new physicsComponent.PhysicsComponent(this);
 	    physics.position.y = 0.6;
-	    physics.position.x = -0.1;
+	    physics.position.x = 0.2;
 	    this.radius = 0.02;
 	    this.size = {
 	        x: 0.07,
@@ -10368,7 +10412,7 @@
 	    } else {
 	        physics.position.y = 0;
 	    }
-	    physics.position.x = 4000 / graphics.canvas.width;
+	    physics.position.x = 2500 / graphics.canvas.width;
 	    physics.velocity.x = -0.4;
 	
 	    switch (offset) {
@@ -10617,13 +10661,13 @@
 	    var updateHsAndLB = function () {
 	        var hs = localStorage.getItem("highscore");
 	        if (hs !== null && Number.isInteger(parseInt(hs))) {
-	            this.highScore = hs;
+	            highScore = parseInt(hs);
 	        }
 	
 	        var lb = localStorage.getItem("leaderboard");
 	        if (lb !== null) {
 	            try {
-	                this.leaderboard = JSON.parse(lb);
+	                leaderboard = JSON.parse(lb);
 	            } catch (e) {
 	                //How dare you mess with my code?!
 	                console.log(":B");
@@ -10674,11 +10718,11 @@
 	
 	        leaderboard.sortOn("score");
 	
-	        if (10 < leaderboard.length) {
-	            leaderboard.length = 10;
+	        if (100 < leaderboard.length) {
+	            leaderboard.length = 100;
 	        }
 	
-	        localStorage.setItem("leaderboard", leaderboard);
+	        localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
 	
 	        this.reset();
 	
@@ -10689,9 +10733,9 @@
 	//:B
 	Array.prototype.sortOn = function (key) {
 	    this.sort(function (a, b) {
-	        if (a[key] < b[key]) {
+	        if (a[key] > b[key]) {
 	            return -1;
-	        } else if (a[key] > b[key]) {
+	        } else if (a[key] < b[key]) {
 	            return 1;
 	        }
 	        return 0;

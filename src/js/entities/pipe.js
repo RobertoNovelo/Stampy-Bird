@@ -16,7 +16,7 @@ var Pipe = function(topPipe,offset)
     {
         physics.position.y = 0;
     }
-    physics.position.x = 4000/graphics.canvas.width;
+    physics.position.x = 2500/graphics.canvas.width;
     physics.velocity.x = -0.4;
 
     switch(offset) {

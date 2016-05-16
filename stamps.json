@@ -1,0 +1,64 @@
+{
+	"stamps": [
+		{
+			"unlocked": false,
+			"image": "https://about.usps.com/postal-bulletin/2007/html/pb22203/images/info2.5.4.1.jpg",
+			"stamp_name": "US Flag",
+			"unlocked_score": 0,
+			"score_multiplier": 1,
+			"shape": "square",
+			"size": {
+				"x": 240,
+				"y": 278
+			}
+		},
+		{
+			"unlocked": false,
+			"image": "https://upload.wikimedia.org/wikipedia/commons/b/b0/Stamp_Middle_Congo_1907_20c.jpg",
+			"stamp_name": "Tiger",
+			"unlocked_score": 5,
+			"score_multiplier": 1,
+			"shape": "horizontal",
+			"size": {
+				"x": 800,
+				"y": 499
+			}
+		},
+		{
+			"unlocked": false,
+			"image": "https://upload.wikimedia.org/wikipedia/commons/3/3b/Stamp_Canada_1929_50c_Bluenose.jpg",
+			"stamp_name": "Boat",
+			"unlocked_score": 10,
+			"score_multiplier": 1,
+			"shape": "horizontal",
+			"size": {
+				"x": 1800,
+				"y": 1247
+			}
+		},
+		{
+			"unlocked": false,
+			"image": "https://www.usps.com/assets/images/stamps/2015/summer-harvest/gallery/stamp_SumHarvest_gallery-1.png",
+			"stamp_name": "Watermelon",
+			"unlocked_score": 15,
+			"score_multiplier": 1,
+			"shape": "square",
+			"size": {
+				"x": 600,
+				"y": 600
+			}
+		},
+		{
+			"unlocked": false,
+			"image": "https://www.usps.com/assets/images/stamps/2015/summer-harvest/gallery/stamp_SumHarvest_gallery-4.png",
+			"stamp_name": "Cantaloupe",
+			"unlocked_score": 20,
+			"score_multiplier": 1,
+			"shape": "square",
+			"size": {
+				"x": 600,
+				"y": 600
+			}
+		}
+	]
+}

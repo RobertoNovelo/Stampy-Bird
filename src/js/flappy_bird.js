@@ -22,7 +22,7 @@ var FlappyBird = function() {
 FlappyBird.prototype.init = function() {
     var bird = this.entities[0];
     bird.components.physics.position.y = 0.6;
-    bird.components.physics.position.x = -0.1;
+    bird.components.physics.position.x = -0.05;
     bird.components.physics.velocity.y = 0;
     bird.components.physics.acceleration.y = 0;
     setTimeout(function(){

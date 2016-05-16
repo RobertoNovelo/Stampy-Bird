@@ -10,7 +10,7 @@ var ScoreSystem = function()
         var hs = localStorage.getItem("highscore");
         if(hs !== null && Number.isInteger(parseInt(hs)))
         {
-            this.highScore = hs;
+            highScore = parseInt(hs);
         }
 
         var lb = localStorage.getItem("leaderboard");
@@ -18,7 +18,7 @@ var ScoreSystem = function()
         {
             try
             {
-                this.leaderboard = JSON.parse(lb);
+                leaderboard = JSON.parse(lb);
             }
             catch(e)
             {
@@ -79,12 +79,12 @@ var ScoreSystem = function()
 
         leaderboard.sortOn("score");
 
-        if(10<leaderboard.length)
+        if(100<leaderboard.length)
         {
-            leaderboard.length = 10;
+            leaderboard.length = 100;
         }
 
-        localStorage.setItem("leaderboard",leaderboard);
+        localStorage.setItem("leaderboard",JSON.stringify(leaderboard));
 
         this.reset();
 
@@ -95,9 +95,9 @@ var ScoreSystem = function()
 //:B
 Array.prototype.sortOn = function(key){
     this.sort(function(a, b){
-        if(a[key] < b[key]){
+        if(a[key] > b[key]){
             return -1;
-        }else if(a[key] > b[key]){
+        }else if(a[key] < b[key]){
             return 1;
         }
         return 0;

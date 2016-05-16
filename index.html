@@ -11,12 +11,12 @@
 	<div id="score-container">
 		<h1>Score: <span id="score">0</span></h1>
 	</div>
-	<div id="promptsavescore-container">
-		<h1>Do you want to save your score?</h1>
-		<input class="playername" type="text" maxlength="20">
+	<div id="promptsavescore-container" class="uiscreen">
+		<h1>Enter your name to save your score!</h1>
+		<input id="playernameinput" class="playername" type="text" maxlength="30">
 		<div class="options-container">
 			<div id="savescore-yes" class="option">
-				<h1>Sure!</h1>
+				<h1>Cool!</h1>
 			</div>
 			<div id="savescore-no" class="option">
 				<h1>Nah!</h1>
@@ -38,7 +38,7 @@
 			</object>
 		</div>
 		<div class="options-container">
-			<div class="option">
+			<div id="leaderBoardBtn" class="option">
 				<h1>Scores</h1>
 			</div>
 			<div id="startGameBtn" class="option">
@@ -49,8 +49,17 @@
 			</div>
 		</div>
 	</div>
+	<div id="playerscores-screen" class="uiscreen playerscoresscreen">
+		<div class="header">
+			<div id="goBackScoresBtn" class="option">
+				<h1>Go back!</h1>
+			</div>
+		</div>
+		<div class="container">
+		</div>
+	</div>
 	<div id="selectstamp-screen" class="uiscreen selectstampscreen">
-		
+
 	</div>
 	<script src="build/stampy-bird.js" type="text/javascript" charset="utf-8"></script>
 </body>
