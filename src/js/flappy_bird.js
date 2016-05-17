@@ -8,10 +8,10 @@ var bird = require('./entities/bird');
 var pipe = require('./entities/pipe');
 var ground = require('./entities/ground');
 var pipecleaner = require('./entities/pipecleaner');
-// var scoreblock = require('./entities/scoreblock');
+var score = require('./entities/score');
 
 var FlappyBird = function() {
-    this.entities = [new bird.Bird(),new pipecleaner.PipeCleaner(),new ground.Ground(true),new ground.Ground(false)];
+    this.entities = [new bird.Bird(),new pipecleaner.PipeCleaner(),new ground.Ground(true),new ground.Ground(false),new score.Score(false)];
     this.graphics = new graphicsSystem.GraphicsSystem(this.entities);
     this.scoreSystem = new scoreSystem.ScoreSystem();
     this.pipespawn = new pipeSpawnSystem.PipeSpawnSystem(this.entities);
