@@ -10162,7 +10162,10 @@
 	
 	var PhysicsSystem = function (entities, pipeSpawnSystem, graphicsSystem, scoreSystem) {
 	    this.entities = entities;
-	    this.collisionSystem = new collisionSystem.CollisionSystem(entities, pipeSpawnSystem, graphicsSystem, scoreSystem);
+	    this.stopInterval = function () {
+	        clearInterval(this.interval);
+	    };
+	    this.collisionSystem = new collisionSystem.CollisionSystem(entities, pipeSpawnSystem, graphicsSystem, scoreSystem, this.stopInterval);
 	};
 	
 	PhysicsSystem.prototype.run = function () {
@@ -10196,12 +10199,13 @@
 	var pipe = __webpack_require__(11);
 	var pipecleaner = __webpack_require__(14);
 	
-	var CollisionSystem = function (entities, pipeSpawnSystem, graphicsSystem, scoreSystem) {
+	var CollisionSystem = function (entities, pipeSpawnSystem, graphicsSystem, scoreSystem, physicsSystemStop) {
 	  this.entities = entities;
 	  this.interval = null;
 	  this.graphicsSystem = graphicsSystem;
 	  this.pipeSpawnSystem = pipeSpawnSystem;
 	  this.scoreSystem = scoreSystem;
+	  this.physicsSystemStop = physicsSystemStop;
 	};
 	
 	CollisionSystem.prototype.run = function () {
@@ -10236,10 +10240,17 @@
 	        entityA.components.collision.onCollision(entityB);
 	
 	        if (entityA instanceof bird.Bird) {
+	          var canvas = document.getElementById('main-canvas');
+	          var context = canvas.getContext('2d');
+	          context.clearRect(0, 0, canvas.width, canvas.height);
+	          this.entities[0].components.physics.position.y = 100;
+	          this.entities[0].components.physics.velocity.y = 0;
+	          this.entities[0].components.physics.acceleration.y = 0;
 	          this.entities.splice(4, this.entities.length - 4);
 	          this.scoreSystem.enable(false);
 	          this.graphicsSystem.stop();
 	          this.pipeSpawnSystem.stop();
+	          this.physicsSystemStop();
 	          this.stop();
 	          $("#promptsavescore-container").fadeIn();
 	        }
@@ -10252,10 +10263,17 @@
 	      if (entityB.components.collision.onCollision) {
 	        entityB.components.collision.onCollision(entityA);
 	        if (entityB instanceof bird.Bird) {
+	          var canvas = document.getElementById('main-canvas');
+	          var context = canvas.getContext('2d');
+	          this.entities[0].components.physics.position.y = 0;
+	          this.entities[0].components.physics.velocity.y = 0;
+	          this.entities[0].components.physics.acceleration.y = 0;
+	          context.clearRect(0, 0, canvas.width, canvas.height);
 	          this.entities.splice(4, this.entities.length - 4);
 	          this.scoreSystem.enable(false);
 	          this.graphicsSystem.stop();
 	          this.pipeSpawnSystem.stop();
+	          this.physicsSystemStop();
 	          this.stop();
 	          $("#promptsavescore-container").fadeIn();
 	        }
@@ -10479,9 +10497,9 @@
 	var collisionComponent = __webpack_require__(13);
 	// var settings = require("../settings");
 	
-	var Pipe = function (topPipe, offset) {
+	var Pipe = function (topPipe, offset, image) {
 	    var physics = new physicsComponent.PhysicsComponent(this);
-	    var graphics = new graphicsComponent.PipeGraphicsComponent(this);
+	    var graphics = new graphicsComponent.PipeGraphicsComponent(this, image);
 	    physics.position.topPipe = topPipe;
 	    if (topPipe) {
 	        physics.position.y = 0.7;
@@ -10546,19 +10564,28 @@
 /* 12 */
 /***/ function(module, exports) {
 
-	var PipeGraphicsComponent = function (entity) {
+	var PipeGraphicsComponent = function (entity, image) {
 	    this.entity = entity;
 	    this.canvas = document.getElementById('main-canvas');
+	    this.envimage = image;
 	};
 	
 	PipeGraphicsComponent.prototype.draw = function (context) {
 	    var position = this.entity.components.physics.position;
 	    var size = this.entity.size;
 	
-	    context.save();
-	    context.fillStyle = "green";
-	    context.fillRect(position.x, position.y, size.x, size.y);
-	    context.restore();
+	    if (envelopeImageLoaded) {
+	        context.save();
+	        context.translate(position.x, position.y);
+	        context.rotate(Math.PI / 2);
+	        context.drawImage(this.envimage, 0, position.y, this.envimage.width, this.envimage.height, 0, 0, size.y, -size.x);
+	        context.restore();
+	    } else {
+	        context.save();
+	        context.fillStyle = "green";
+	        context.fillRect(position.x, position.y, size.x, size.y);
+	        context.restore();
+	    }
 	};
 	
 	exports.PipeGraphicsComponent = PipeGraphicsComponent;
@@ -10707,6 +10734,13 @@
 	var PipeSpawnSystem = function (entities) {
 	    this.entities = entities;
 	    this.interval = null;
+	    this.envimage = new Image();
+	    envelopeImageLoaded = false;
+	    this.setEnvImageLoaded = function () {
+	        envelopeImageLoaded = true;
+	    };
+	    this.envimage.src = "./src/img/envelope.png";
+	    this.envimage.onload = this.setEnvImageLoaded;
 	};
 	
 	PipeSpawnSystem.prototype.run = function () {
@@ -10719,7 +10753,9 @@
 	
 	PipeSpawnSystem.prototype.tick = function () {
 	    var offset = Math.floor(Math.random() * 6);
-	    this.entities.push(new pipe.Pipe(true, offset), new pipe.Pipe(false, offset));
+	    if (envelopeImageLoaded) {
+	        this.entities.push(new pipe.Pipe(true, offset, this.envimage), new pipe.Pipe(false, offset, this.envimage));
+	    }
 	};
 	
 	exports.PipeSpawnSystem = PipeSpawnSystem;

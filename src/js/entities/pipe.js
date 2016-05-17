@@ -3,10 +3,10 @@ var graphicsComponent = require("../components/graphics/pipe");
 var collisionComponent = require("../components/collision/rect");
 // var settings = require("../settings");
 
-var Pipe = function(topPipe,offset)
+var Pipe = function(topPipe,offset,image)
 {
     var physics = new physicsComponent.PhysicsComponent(this);
-    var graphics = new graphicsComponent.PipeGraphicsComponent(this);
+    var graphics = new graphicsComponent.PipeGraphicsComponent(this,image);
     physics.position.topPipe = topPipe;
     if(topPipe)
     {
