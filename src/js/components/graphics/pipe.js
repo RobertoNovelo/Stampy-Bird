@@ -13,7 +13,7 @@ PipeGraphicsComponent.prototype.draw = function(context) {
 		context.save();
 		context.translate(position.x, position.y);
 		context.rotate(Math.PI/2);
-		context.drawImage(this.envimage, 0,position.y, this.envimage.width,this.envimage.height, 0,0, size.y,-size.x);
+		context.drawImage(this.envimage, 0,0, this.envimage.width,this.envimage.height, 0,0, size.y,-size.x);
 		context.restore();
     }
     else
