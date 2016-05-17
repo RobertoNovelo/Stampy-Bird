@@ -3,7 +3,11 @@ var collisionSystem = require("./collision");
 var PhysicsSystem = function(entities,pipeSpawnSystem,graphicsSystem,scoreSystem)
 {
     this.entities = entities;
-    this.collisionSystem = new collisionSystem.CollisionSystem(entities,pipeSpawnSystem,graphicsSystem,scoreSystem);
+    this.stopInterval = function()
+    {
+        clearInterval(this.interval);
+    }
+    this.collisionSystem = new collisionSystem.CollisionSystem(entities,pipeSpawnSystem,graphicsSystem,scoreSystem,this.stopInterval);
 };
 
 PhysicsSystem.prototype.run = function() {
