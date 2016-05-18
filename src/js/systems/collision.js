@@ -2,12 +2,13 @@ var bird = require('../entities/bird');
 var pipe = require('../entities/pipe');
 var pipecleaner = require('../entities/pipecleaner');
 
-var CollisionSystem = function(entities,pipeSpawnSystem,graphicsSystem,scoreSystem) {
+var CollisionSystem = function(entities,pipeSpawnSystem,graphicsSystem,scoreSystem,physicsSystemStop) {
   this.entities = entities;
   this.interval = null;
   this.graphicsSystem = graphicsSystem;
   this.pipeSpawnSystem = pipeSpawnSystem;
   this.scoreSystem = scoreSystem;
+  this.physicsSystemStop = physicsSystemStop;
 };
 
 CollisionSystem.prototype.run = function() {
@@ -42,26 +43,40 @@ CollisionSystem.prototype.tick = function() {
         entityA.components.collision.onCollision(entityB);
 
         if (entityA instanceof bird.Bird) {
-          this.entities.splice(4, this.entities.length-4);
+          var canvas = document.getElementById('main-canvas');
+          var context = canvas.getContext('2d');
+          context.clearRect(0, 0, canvas.width, canvas.height);
+          this.entities[0].components.physics.position.y = 100;
+          this.entities[0].components.physics.velocity.y = 0;
+          this.entities[0].components.physics.acceleration.y = 0;
+          this.entities.splice(5, this.entities.length-5);
           this.scoreSystem.enable(false);
           this.graphicsSystem.stop();
           this.pipeSpawnSystem.stop();
+          this.physicsSystemStop();
           this.stop();
           $("#promptsavescore-container").fadeIn();
         }
 
         if (entityA instanceof pipecleaner.PipeCleaner){
-          this.entities.splice(4,2);
+          this.entities.splice(5,2);
         }
       }
 
       if (entityB.components.collision.onCollision) {
         entityB.components.collision.onCollision(entityA);
         if (entityB instanceof bird.Bird) {
-          this.entities.splice(4, this.entities.length-4);
+          var canvas = document.getElementById('main-canvas');
+          var context = canvas.getContext('2d');
+          this.entities[0].components.physics.position.y = 0;
+          this.entities[0].components.physics.velocity.y = 0;
+          this.entities[0].components.physics.acceleration.y = 0;
+          context.clearRect(0, 0, canvas.width, canvas.height);
+          this.entities.splice(5, this.entities.length-5);
           this.scoreSystem.enable(false);
           this.graphicsSystem.stop();
           this.pipeSpawnSystem.stop();
+          this.physicsSystemStop();
           this.stop();
           $("#promptsavescore-container").fadeIn();
         }

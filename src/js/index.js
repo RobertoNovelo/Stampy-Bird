@@ -110,7 +110,7 @@ $(function()
 		}
 		else
 		{
-			if(app.scoreSystem.saveScoreAndResetAndIsHighScore($("#playernameinput").val(),parseInt(localStorage.getItem("currentStampImageIndex"))))
+			if(app.entities[4].components.scoreSystem.saveScoreAndResetAndIsHighScore($("#playernameinput").val(),parseInt(localStorage.getItem("currentStampImageIndex"))))
 			{
 				updateScoresScreen();
 				// $("#playerscores-screen .container .ranking:first-child").addClass("highscore");

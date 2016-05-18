@@ -138,7 +138,7 @@
 					}
 				}, 2000);
 			} else {
-				if (app.scoreSystem.saveScoreAndResetAndIsHighScore($("#playernameinput").val(), parseInt(localStorage.getItem("currentStampImageIndex")))) {
+				if (app.entities[4].components.scoreSystem.saveScoreAndResetAndIsHighScore($("#playernameinput").val(), parseInt(localStorage.getItem("currentStampImageIndex")))) {
 					updateScoresScreen();
 					// $("#playerscores-screen .container .ranking:first-child").addClass("highscore");
 					// TODO: Something way beter than that ^^^^^ :B
@@ -10046,10 +10046,10 @@
 	var pipe = __webpack_require__(11);
 	var ground = __webpack_require__(19);
 	var pipecleaner = __webpack_require__(14);
-	// var scoreblock = require('./entities/scoreblock');
+	var score = __webpack_require__(21);
 	
 	var FlappyBird = function () {
-	    this.entities = [new bird.Bird(), new pipecleaner.PipeCleaner(), new ground.Ground(true), new ground.Ground(false)];
+	    this.entities = [new bird.Bird(), new pipecleaner.PipeCleaner(), new ground.Ground(true), new ground.Ground(false), new score.Score(false)];
 	    this.graphics = new graphicsSystem.GraphicsSystem(this.entities);
 	    this.scoreSystem = new scoreSystem.ScoreSystem();
 	    this.pipespawn = new pipeSpawnSystem.PipeSpawnSystem(this.entities);
@@ -10162,7 +10162,10 @@
 	
 	var PhysicsSystem = function (entities, pipeSpawnSystem, graphicsSystem, scoreSystem) {
 	    this.entities = entities;
-	    this.collisionSystem = new collisionSystem.CollisionSystem(entities, pipeSpawnSystem, graphicsSystem, scoreSystem);
+	    this.stopInterval = function () {
+	        clearInterval(this.interval);
+	    };
+	    this.collisionSystem = new collisionSystem.CollisionSystem(entities, pipeSpawnSystem, graphicsSystem, scoreSystem, this.stopInterval);
 	};
 	
 	PhysicsSystem.prototype.run = function () {
@@ -10196,12 +10199,13 @@
 	var pipe = __webpack_require__(11);
 	var pipecleaner = __webpack_require__(14);
 	
-	var CollisionSystem = function (entities, pipeSpawnSystem, graphicsSystem, scoreSystem) {
+	var CollisionSystem = function (entities, pipeSpawnSystem, graphicsSystem, scoreSystem, physicsSystemStop) {
 	  this.entities = entities;
 	  this.interval = null;
 	  this.graphicsSystem = graphicsSystem;
 	  this.pipeSpawnSystem = pipeSpawnSystem;
 	  this.scoreSystem = scoreSystem;
+	  this.physicsSystemStop = physicsSystemStop;
 	};
 	
 	CollisionSystem.prototype.run = function () {
@@ -10236,26 +10240,40 @@
 	        entityA.components.collision.onCollision(entityB);
 	
 	        if (entityA instanceof bird.Bird) {
-	          this.entities.splice(4, this.entities.length - 4);
+	          var canvas = document.getElementById('main-canvas');
+	          var context = canvas.getContext('2d');
+	          context.clearRect(0, 0, canvas.width, canvas.height);
+	          this.entities[0].components.physics.position.y = 100;
+	          this.entities[0].components.physics.velocity.y = 0;
+	          this.entities[0].components.physics.acceleration.y = 0;
+	          this.entities.splice(5, this.entities.length - 5);
 	          this.scoreSystem.enable(false);
 	          this.graphicsSystem.stop();
 	          this.pipeSpawnSystem.stop();
+	          this.physicsSystemStop();
 	          this.stop();
 	          $("#promptsavescore-container").fadeIn();
 	        }
 	
 	        if (entityA instanceof pipecleaner.PipeCleaner) {
-	          this.entities.splice(4, 2);
+	          this.entities.splice(5, 2);
 	        }
 	      }
 	
 	      if (entityB.components.collision.onCollision) {
 	        entityB.components.collision.onCollision(entityA);
 	        if (entityB instanceof bird.Bird) {
-	          this.entities.splice(4, this.entities.length - 4);
+	          var canvas = document.getElementById('main-canvas');
+	          var context = canvas.getContext('2d');
+	          this.entities[0].components.physics.position.y = 0;
+	          this.entities[0].components.physics.velocity.y = 0;
+	          this.entities[0].components.physics.acceleration.y = 0;
+	          context.clearRect(0, 0, canvas.width, canvas.height);
+	          this.entities.splice(5, this.entities.length - 5);
 	          this.scoreSystem.enable(false);
 	          this.graphicsSystem.stop();
 	          this.pipeSpawnSystem.stop();
+	          this.physicsSystemStop();
 	          this.stop();
 	          $("#promptsavescore-container").fadeIn();
 	        }
@@ -10383,7 +10401,9 @@
 	        context.save();
 	        context.translate(position.x, position.y);
 	        context.rotate(Math.PI);
-	        context.drawImage(this.image, -0.1, 0, this.image.width * (0.1 / this.image.height), 0.1);
+	        context.scale(-1, 1);
+	        context.drawImage(this.image, -(size.x / 2), -(size.y / 2), size.x * (0.1 / size.y) * (this.image.width > this.image.height ? this.image.width / this.image.height : this.image.height / this.image.width), size.y);
+	        // context.drawImage(this.image,-0.1,0,this.image.width * (0.1/this.image.height), 0.1);
 	        context.restore();
 	    } else {
 	        context.save();
@@ -10479,9 +10499,9 @@
 	var collisionComponent = __webpack_require__(13);
 	// var settings = require("../settings");
 	
-	var Pipe = function (topPipe, offset) {
+	var Pipe = function (topPipe, offset, image) {
 	    var physics = new physicsComponent.PhysicsComponent(this);
-	    var graphics = new graphicsComponent.PipeGraphicsComponent(this);
+	    var graphics = new graphicsComponent.PipeGraphicsComponent(this, image);
 	    physics.position.topPipe = topPipe;
 	    if (topPipe) {
 	        physics.position.y = 0.7;
@@ -10546,9 +10566,10 @@
 /* 12 */
 /***/ function(module, exports) {
 
-	var PipeGraphicsComponent = function (entity) {
+	var PipeGraphicsComponent = function (entity, image) {
 	    this.entity = entity;
 	    this.canvas = document.getElementById('main-canvas');
+	    this.envimage = image;
 	};
 	
 	PipeGraphicsComponent.prototype.draw = function (context) {
@@ -10556,8 +10577,9 @@
 	    var size = this.entity.size;
 	
 	    context.save();
-	    context.fillStyle = "green";
-	    context.fillRect(position.x, position.y, size.x, size.y);
+	    context.translate(position.x, position.y);
+	    context.rotate(Math.PI / 2);
+	    context.drawImage(this.envimage, 0, 0, size.y, -size.x);
 	    context.restore();
 	};
 	
@@ -10692,8 +10714,18 @@
 	    if (0 == bird.components.physics.acceleration.y) {
 	        bird.components.physics.acceleration.y = -2;
 	    }
-	    this.scoreSystem.plusPlus();
-	    $("#score").text(this.scoreSystem.getScore());
+	    // this.scoreSystem.plusPlus();
+	};
+	
+	InputSystem.prototype.onTouch = function (e) {
+	    //console.log('touch');
+	    e.preventDefault();
+	    var bird = this.entities[0];
+	    bird.components.physics.velocity.y = 0.7;
+	    if (0 == bird.components.physics.acceleration.y) {
+	        bird.components.physics.acceleration.y = -2;
+	    }
+	    // this.scoreSystem.plusPlus();
 	};
 	
 	exports.InputSystem = InputSystem;
@@ -10707,6 +10739,13 @@
 	var PipeSpawnSystem = function (entities) {
 	    this.entities = entities;
 	    this.interval = null;
+	    this.envimage = new Image();
+	    envelopeImageLoaded = false;
+	    this.setEnvImageLoaded = function () {
+	        envelopeImageLoaded = true;
+	    };
+	    this.envimage.src = "./src/img/envelope.png";
+	    this.envimage.onload = this.setEnvImageLoaded;
 	};
 	
 	PipeSpawnSystem.prototype.run = function () {
@@ -10719,7 +10758,9 @@
 	
 	PipeSpawnSystem.prototype.tick = function () {
 	    var offset = Math.floor(Math.random() * 6);
-	    this.entities.push(new pipe.Pipe(true, offset), new pipe.Pipe(false, offset));
+	    if (envelopeImageLoaded) {
+	        this.entities.push(new pipe.Pipe(true, offset, this.envimage), new pipe.Pipe(false, offset, this.envimage));
+	    }
 	};
 	
 	exports.PipeSpawnSystem = PipeSpawnSystem;
@@ -10888,6 +10929,65 @@
 	};
 	
 	exports.GroundGraphicsComponent = GroundGraphicsComponent;
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var graphicsComponent = __webpack_require__(15);
+	var physicsComponent = __webpack_require__(7);
+	var collisionComponent = __webpack_require__(13);
+	var scoreSystem = __webpack_require__(18);
+	
+	var Score = function () {
+	  this.color = 'rgba(0,0,0,0)';
+	  this.size = {
+	    x: 0.001,
+	    y: 0.8
+	  };
+	
+	  var physics = new physicsComponent.PhysicsComponent(this);
+	  physics.position.x = -0.2;
+	  physics.position.y = 0;
+	
+	  var graphics = new graphicsComponent.RectGraphicsComponent(this);
+	  var collision = new collisionComponent.RectCollisionComponent(this, this.size);
+	  var score = new scoreSystem.ScoreSystem();
+	  collision.onCollision = this.onCollision.bind(this);
+	
+	  this.components = {
+	    physics: physics,
+	    graphics: graphics,
+	    collision: collision,
+	    scoreSystem: score
+	  };
+	
+	  var allowScore = true;
+	
+	  this.getAllowScore = function () {
+	    return allowScore;
+	  };
+	
+	  this.disableAllowScore = function () {
+	    allowScore = false;
+	  };
+	
+	  this.enableAllowScore = function () {
+	    allowScore = true;
+	  };
+	};
+	
+	Score.prototype.onCollision = function (entity) {
+	  console.log(this);
+	  if (this.getAllowScore()) {
+	    this.components.scoreSystem.plusPlus();
+	    $("#score").text(this.components.scoreSystem.getScore());
+	    this.disableAllowScore();
+	    setTimeout(this.enableAllowScore, 1000);
+	  }
+	};
+	
+	exports.Score = Score;
 
 /***/ }
 /******/ ]);
