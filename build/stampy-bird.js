@@ -72,7 +72,7 @@
 	
 		$("#startGameBtn").on("click", function () {
 			app.clearGame();
-			$("#score").text(0);
+			$("#score").text("0");
 			setTimeout(function () {
 				app.init();
 				app.run();
